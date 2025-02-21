@@ -1,0 +1,54 @@
+// app global css in SCSS form
+$xs: 2px;
+$s: 5px;
+$m: 7px;
+$l: 10px;
+$xl: 13px;
+
+.g-xs {
+  gap: $xs;
+}
+.g-s {
+  gap: $s;
+}
+.g-m {
+  gap: $m;
+}
+.g-l {
+  gap: $l;
+}
+.g-xl {
+  gap: $xl;
+}
+
+.flex-grow {
+  flex-grow: 10;
+}
+
+.bg-none {
+  background: none;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  flex-grow: 100;
+}
+
+.banner-title {
+  font-size: 22px;
+  font-weight: 600;
+  flex-grow: 100;
+  color: var(--q-primary);
+}
+
+.primary-text {
+  color: var(--q-primary);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.error-field {
+  background-color: rgba(255, 0, 0, 0.096) !important;
+  color: rgb(202, 0, 0);
+}

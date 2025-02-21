@@ -1,0 +1,103 @@
+version: '3.8'
+
+networks:
+  new:
+
+services:
+  backend:
+    networks:
+      - new
+    build: ./backend
+    restart: always
+    command: ./backend
+    ports:
+      - "8001:8001"
+    environment:
+      - APP_IP=
+      - APP_PORT=8001
+      - TIMEOUT_DURATION=1
+      - EXTERNAL_APP_HOST=http://localhost:8000
+      - EXTERNAL_AUTH_HEADER=jhdfnb3riufb483785b45sdjkv.dfisndof-dfnsdofnsjdjfnsjfbdsj
+      - FIRST_A_LAB_TOKEN=ajkdfnshdabvpdhifvndsfjhlnfsjdlfkjsdfsdfsdf
+      - FIRST_B_LAB_TOKEN=lksdfmmskdkfmlsmdfklsdmfksdfmsldfkmsldkflsdkl
+      - SECOND_LAB_A_TOKEN=sdkfnsdjklafnljkdsnfkjdsanfkljsadnfjlsldnf
+      - FIRST_LAB_A_DURATION_MINUTES=90
+      - FIRST_LAB_B_DURATION_MINUTES=90
+      - SECOND_LAB_A_DURATION_MINUTES=90
+      - FIRST_LAB_TOKEN=38419u38uroefeniuhf9835f34ub20yb5b2y522ny5
+      - SECOND_LAB_TOKEN=dsjfnwp9u82n39f85n324079vn0we0unsidvkjnvv7
+      - THIRD_LAB_TOKEN=fjdvno8745b205vb58724b85vb745b724tfn72nf27
+      - LECTURER_HEADER=e8r4fn0y24nyvn4y8c430FdfvbudfuvRErfnernjen
+      - FIRST_LAB_DURATION_MINUTES=90
+      - SECOND_LAB_DURATION_MINUTES=90
+      - THIRD_LAB_DURATION_MINUTES=90
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_DBNAME=labs
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_SSL_MODE=disable
+      - LAB1_FRONTEND_HOST=https://mephi71.ru:9001
+      - LAB3_FRONTEND_HOST=http://mephi71.ru:9002
+    depends_on:
+      - migrate
+
+  db:
+    image: postgres:16
+    restart: always
+    networks:
+      new:
+        aliases:
+          - database
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=labs
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./.database/postgres/data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  migrate:
+    image: migrate/migrate
+    networks:
+      - new
+    volumes:
+      - ./backend/migrations:/migrations
+    command: [ "-path", "/migrations", "-database",  "postgres://postgres:postgres@database:5432/labs?sslmode=disable", "up", "3" ]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  labs1-frontend:
+    networks:
+      - new
+    build:
+      context: ./labs1-frontend
+    ports:
+      - "9001:81"
+    environment:
+      - BASE_1A_URL=https://mephi71.ru:8001
+      - BASE_1B_URL=https://mephi71.ru:8001
+    depends_on:
+      - backend
+
+  labs3-frontend:
+    networks:
+      - new
+    build:
+      context: ./labs3-frontend
+    ports:
+      - "9002:80"
+    environment:
+    - LAB3_URL=https://mephi71.ru:8001
+    depends_on:
+      - backend
+
+volumes:
+  db-data: {}

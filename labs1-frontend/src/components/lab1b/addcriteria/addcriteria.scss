@@ -1,0 +1,52 @@
+.add-criteria {
+    padding: 20px;
+    &__button {
+        &_sub {
+            margin-top: 15px;
+        }
+    }
+    &__wrapper {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        flex-wrap: wrap
+    }
+    &__section {
+        position: relative;
+        border: 1px solid gray;
+        padding: 17px 10px;
+        min-width: 200px;
+        display: flex;
+        flex-direction: column;
+    }
+    &__input {
+        margin-top: 5px;
+        border: 1px solid lightgray;
+        padding: 5px;
+        &_main {
+            font-weight: bold;
+        }
+    }
+    &__sub-wrapper {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+    &__remove-btn {
+        border: none;
+        padding: 3px 6px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 3px;
+        margin-left: 5px;
+        transition: 0.2s all;
+        &:hover {
+            color: #ff4d4d
+        }
+        &_main {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+    }
+}
